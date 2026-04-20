@@ -10,6 +10,8 @@
 std::vector<int> SelectionSort(std::vector<int> A) {
     std::vector<int> B;
 
+    int* smallest;
+
     while (!A.empty()) {
         /* C++ HINT: 
            1. Use std::min_element(A.begin(), A.end()) to find the "iterator" to the minimum.
@@ -18,6 +20,11 @@ std::vector<int> SelectionSort(std::vector<int> A) {
         */
         
         // TODO: Find min, push to B, erase from A
+
+        smallest = std::min_element(A.begin(), A.end()); // create iterator
+        B.push_back(*smallest); // put element at back of B
+        A.erase(smallest); // erase element from A
+
     }
     return B;
 }
@@ -33,6 +40,32 @@ std::vector<int> Merge(std::vector<int> left, std::vector<int> right) {
     
     // TODO: Compare left[i] and right[j], push the smaller one to 'result'
     // Don't forget to push any remaining elements after one side is empty!
+
+    // edge case, empty vector inputs
+    if (right.empty()) return left;
+    if (left.empty()) return right;
+
+    int i=0, j=0; // two pointer
+    while (i < left.size() && j < right.size()) { // while there are contents in both vectors
+        
+        if (left.at(i) <= right.at(j)) {
+            result.push_back(left.at(i));
+            i++;
+        } else {
+            result.push_back(right.at(j));
+            j++;
+        }
+    }
+
+    while (i < left.size()) { // remaining stuff in left vector
+        result.push_back(left.at(i));
+        i++;
+    }
+
+    while (j < right.size()) { // remaining stuff in right vector
+        result.push_back(right.at(j));
+        j++;
+    }
 
     return result;
 }
