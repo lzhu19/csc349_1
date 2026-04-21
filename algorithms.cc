@@ -1,3 +1,5 @@
+// Laura Zhu
+
 #include "algorithms.h"
 #include <limits>
 #include <algorithm> // For std::min_element, std::max_element
