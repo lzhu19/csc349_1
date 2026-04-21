@@ -10,7 +10,8 @@
 std::vector<int> SelectionSort(std::vector<int> A) {
     std::vector<int> B;
 
-    int* smallest;
+    // init iterator for min value
+    std::vector<int>::iterator smallest;
 
     while (!A.empty()) {
         /* C++ HINT: 
@@ -23,7 +24,7 @@ std::vector<int> SelectionSort(std::vector<int> A) {
 
         smallest = std::min_element(A.begin(), A.end()); // create iterator
         B.push_back(*smallest); // put element at back of B
-        A.erase(smallest); // erase element from A
+        A.erase(smallest); // erase element from A at smallest
 
     }
     return B;
@@ -48,7 +49,7 @@ std::vector<int> Merge(std::vector<int> left, std::vector<int> right) {
     int i=0, j=0; // two pointer
     while (i < left.size() && j < right.size()) { // while there are contents in both vectors
         
-        if (left.at(i) <= right.at(j)) {
+        if (left.at(i) <= right.at(j)) { // compare minimums and add whichever is smaller to result
             result.push_back(left.at(i));
             i++;
         } else {
@@ -90,7 +91,18 @@ std::vector<int> MergeSort(std::vector<int> A) {
     // 3. Recursive calls: MergeSort(left) and MergeSort(right)
     // 4. Return Merge() of the two sorted results
 
-    return A; 
+    int mid = A.size() / 2; // middle index
+
+    // create left and right subvectors
+    std::vector<int> left(A.begin(), A.begin()+mid);
+    std::vector<int> right(A.begin() + mid, A.end());
+
+    // recursive call on both left and right subvectors
+    std::vector<int> sorted_left = MergeSort(left);
+    std::vector<int> sorted_right = MergeSort(right);
+
+    // merge the left and right subvectors and return result
+    return Merge(sorted_left, sorted_right);
 }
 
 /**
@@ -112,5 +124,29 @@ std::vector<int> CountingSort(std::vector<int> A) {
     // 2. Create a frequency vector 'T' initialized to zeros: std::vector<int> T(range, 0);
     // 3. Fill B by iterating through T and adding the original values back in order
 
-    return {}; 
+    // minimum and maximum values
+    int min_val = *std::min_element(A.begin(), A.end());
+    int max_val = *std::max_element(A.begin(), A.end());
+    int range = max_val - min_val + 1;
+
+    std::vector<int> T(range, 0); // initialize frequency array of zeros
+    std::vector<int> B; // empty output sequence
+
+    // fill frequency array
+    for (int i=0; i<A.size(); i++) { // for every value in A
+
+        // the value A.at(i) is related to the index the frequency will be stored in T
+        int val = A.at(i); // value at index i in A
+        int newI = val - min_val; // translate the value to an index for T
+        T.at(newI) = T.at(newI) + 1; // increment the value at newI in T by 1
+    }
+
+    // once frequency array is finished, sort with frequency array
+    for (int i = 0; i < range; i++) { 
+        for (int j=1; j<=T.at(i); j++) {
+            B.push_back(i);
+        }
+    }
+
+    return B; 
 }
