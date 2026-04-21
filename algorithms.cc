@@ -142,8 +142,9 @@ std::vector<int> CountingSort(std::vector<int> A) {
     }
 
     // once frequency array is finished, sort with frequency array
-    for (int i = 0; i < range; i++) { 
-        for (int j=1; j<=T.at(i); j++) {
+    for (int i = min_val; i <= max_val; i++) { 
+        int T_idx = i - min_val;
+        for (int j=1; j<=T.at(T_idx); j++) {
             B.push_back(i);
         }
     }
